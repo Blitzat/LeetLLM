@@ -3,7 +3,9 @@ import axios from 'axios';
 
 export async function getProblemsList(): Promise<DBProblem[]> {
 	try {
-		const response = await axios.get('http://api.leetllm.com/problems?language=en', { headers: { 'Access-Control-Allow_Origin': '*' } });
+
+		
+		const response = await axios.get('http://api.leetllm.com/problems?language=en');
 		const problems: DBProblem[] = response.data.map((problem: any) => ({
 			id: problem.id,
 			title: problem.title,
