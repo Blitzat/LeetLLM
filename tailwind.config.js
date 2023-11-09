@@ -21,7 +21,7 @@ module.exports = {
 				"dark-gray-7": "rgb(179, 179, 179)",
 				"gray-8": "rgb(38, 38, 38)",
 				"dark-gray-8": "rgb(219, 219, 219)",
-				"brand-orange": "rgb(255 161 22)",
+				"brand-orange": "rgb(123, 70, 237)", // HACK: This is purple, not orange!
 				"brand-orange-s": "rgb(193, 122, 15)",
 				"dark-yellow": "rgb(255 192 30)",
 				"dark-pink": "rgb(255 55 95)",
