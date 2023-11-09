@@ -1,6 +1,7 @@
 import ProblemsTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
 import useHasMounted from "@/hooks/useHasMounted";
+import Script from 'next/script'
 
 import { useState } from "react";
 
@@ -12,6 +13,16 @@ export default function Home() {
 
 	return (
 		<>
+			<Script src="https://www.googletagmanager.com/gtag/js?id=G-D16GBFPS1X" />
+			<Script id="google-analytics">
+				{`
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+		
+				gtag('config', 'G-D16GBFPS1X');
+				`}
+			</Script>
 			<main className='bg-dark-layer-2 min-h-screen'>
 				<Topbar />
 				<h1
