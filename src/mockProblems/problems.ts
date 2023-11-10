@@ -1,91 +1,36 @@
-export type Problem = {
-	id: string;
-	title: string;
-	difficulty: string;
-	category: string;
-	order: number;
-	videoId?: string;
-};
+import { DBProblem } from '@/utils/types/problem';
+import axios from 'axios';
 
-export const problems: Problem[] = [
-	{
-		id: "two-sum",
-		title: "Two Sum",
-		difficulty: "Easy",
-		category: "Array",
-		order: 1,
-		videoId: "8-k1C6ehKuw",
-	},
-	{
-		id: "reverse-linked-list",
-		title: "Reverse Linked List",
-		difficulty: "Hard",
-		category: "Linked List",
-		order: 2,
-		videoId: "",
-	},
-	{
-		id: "jump-game",
-		title: "Jump Game",
-		difficulty: "Medium",
-		category: "Dynamic Programming",
-		order: 3,
-		videoId: "",
-	},
-	{
-		id: "valid-parentheses",
-		title: "Valid Parentheses",
-		difficulty: "Easy",
-		category: "Stack",
-		order: 4,
-		videoId: "xty7fr-k0TU",
-	},
-	{
-		id: "search-a-2d-matrix",
-		title: "Search a 2D Matrix",
-		difficulty: "Medium",
-		category: "Binary Search",
-		order: 5,
-		videoId: "ZfFl4torNg4",
-	},
-	{
-		id: "container-with-most-water",
-		title: "Container With Most Water",
-		difficulty: "Medium",
-		category: "Two Pointers",
-		order: 6,
-		videoId: "",
-	},
-	{
-		id: "merge-intervals",
-		title: "Merge Intervals",
-		difficulty: "Medium",
-		category: "intervals",
-		order: 7,
-		videoId: "",
-	},
-	{
-		id: "maximum-depth-of-binary-tree",
-		title: "Maximum Depth of Binary Tree",
-		difficulty: "Easy",
-		category: "Tree",
-		order: 8,
-		videoId: "4qYTqOiRMoM",
-	},
-	{
-		id: "best-time-to-buy-and-sell-stock",
-		title: "Best Time to Buy and Sell Stock",
-		difficulty: "Easy",
-		category: "Array",
-		order: 9,
-		videoId: "",
-	},
-	{
-		id: "subsets",
-		title: "Subsets",
-		difficulty: "Medium",
-		category: "Backtracking",
-		order: 10,
-		videoId: "",
-	},
-];
+export async function getProblemsList(): Promise<DBProblem[]> {
+	try {
+		const response = await axios.get('http://api.leetllm.com/problems?language=en');
+		const problems: DBProblem[] = response.data.map((problem: any) => ({
+			id: problem.id,
+			title: problem.title,
+			order: problem.order,
+			problemStatement: problem.problemStatement,
+		}));
+		console.log(problems);
+		return problems;
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+}
+
+export const problems: Promise<DBProblem[]> = getProblemsList();
+
+// export const problems: DBProblem[] = [
+// 	{
+// 		id: "two-sum",
+// 		title: "Two Sum",
+// 		order: 1,
+// 		problemStatement: "What is 1 + 1?",
+// 	},
+// 	{
+// 		id: "three-sum",
+// 		title: "Three Sum",
+// 		order: 2,
+// 		problemStatement: "What is 1 + 1 + 1?",
+// 	},
+// ];

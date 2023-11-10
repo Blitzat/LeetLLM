@@ -8,7 +8,13 @@ import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/fires
 import { auth, firestore } from "@/firebase/firebase";
 import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { problems as plist } from "@/mockProblems/problems";
+import { problems as plist, getProblemsList } from "@/mockProblems/problems";
+
+// async function storeProblems() {
+//     console.log(await plist);
+// }
+
+// storeProblems();
 
 type ProblemsTableProps = {
 	setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,9 +46,9 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 			<tbody className='text-white'>
 				{problems.map((problem, idx) => {
 					const difficulyColor =
-						problem.difficulty === "Easy"
+						problem.id === "Easy"
 							? "text-dark-green-s"
-							: problem.difficulty === "Medium"
+							: problem.id === "Medium"
 							? "text-dark-yellow"
 							: "text-dark-pink";
 					return (
@@ -51,9 +57,9 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 								{solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={"18"} width='18' />}
 							</th>
 							<td className='px-6 py-4'>
-								{problem.link ? (
+								{problem.id ? (
 									<Link
-										href={problem.link}
+										href={problem.id}
 										className='hover:text-blue-600 cursor-pointer'
 										target='_blank'
 									>
@@ -68,15 +74,15 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 									</Link>
 								)}
 							</td>
-							<td className={`px-6 py-4 ${difficulyColor}`}>{problem.difficulty}</td>
-							<td className={"px-6 py-4"}>{problem.category}</td>
+							<td className={`px-6 py-4 ${difficulyColor}`}>{problem.id}</td>
+							<td className={"px-6 py-4"}>{problem.id}</td>
 							<td className={"px-6 py-4"}>
-								{problem.videoId ? (
+								{problem.id ? (
 									<AiFillYoutube
 										fontSize={"28"}
 										className='cursor-pointer hover:text-red-600'
 										onClick={() =>
-											setYoutubePlayer({ isOpen: true, videoId: problem.videoId as string })
+											setYoutubePlayer({ isOpen: true, videoId: problem.id as string })
 										}
 									/>
 								) : (
@@ -123,13 +129,9 @@ function useGetProblems(setLoadingProblems: React.Dispatch<React.SetStateAction<
 		const getProblems = async () => {
 			// fetching data logic
 			setLoadingProblems(true);
-			const q = query(collection(firestore, "problems"), orderBy("order", "asc"));
-			const querySnapshot = await getDocs(q);
-			const tmp: DBProblem[] = [];
-			plist.forEach((doc) => {
-				tmp.push({ ...doc } as DBProblem);
-			});
-			setProblems(tmp);
+			const problemList = await getProblemsList();
+			console.log('log', problemList);
+			setProblems(problemList);
 			setLoadingProblems(false);
 		};
 
