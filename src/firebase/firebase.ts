@@ -12,13 +12,13 @@ import { getFirestore } from "firebase/firestore";
 // };
 
 const firebaseConfig = {
-	apiKey: "AIzaSyAffisCdRW2qR8XoppurClAg7O0Buz5vGs",
-	authDomain: "leetllm.firebaseapp.com",
-	projectId: "leetllm",
-	storageBucket: "leetllm.appspot.com",
-	messagingSenderId: "321472127598",
-	appId: "1:321472127598:web:8c632411a38e026da47c7f",
-	measurementId: "G-CX6KZFTFVT"
+	apiKey: "AIzaSyAd6Vxygs4je5OQG2TgeWRlpXVe2BQHFXY",
+	authDomain: "leetllm-7130e.firebaseapp.com",
+	projectId: "leetllm-7130e",
+	storageBucket: "leetllm-7130e.appspot.com",
+	messagingSenderId: "84172139357",
+	appId: "1:84172139357:web:7a352c0236b3e7c5f5d6b4",
+	measurementId: "G-D16GBFPS1X"
   };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
