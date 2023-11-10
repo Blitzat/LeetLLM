@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsCheckCircle } from "react-icons/bs";
-import { AiFillYoutube } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import YouTube from "react-youtube";
 import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
@@ -9,12 +8,6 @@ import { auth, firestore } from "@/firebase/firebase";
 import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { problems as plist, getProblemsList } from "@/mockProblems/problems";
-
-// async function storeProblems() {
-//     console.log(await plist);
-// }
-
-// storeProblems();
 
 type ProblemsTableProps = {
 	setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,78 +38,25 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 		<>
 			<tbody className='text-white'>
 				{problems.map((problem, idx) => {
-					const difficulyColor =
-						problem.id === "Easy"
-							? "text-dark-green-s"
-							: problem.id === "Medium"
-							? "text-dark-yellow"
-							: "text-dark-pink";
 					return (
 						<tr className={`${idx % 2 == 1 ? "bg-dark-layer-1" : ""}`} key={problem.id}>
 							<th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
-								{solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={"18"} width='18' />}
+								{solvedProblems.includes(problem.id.toString()) && <BsCheckCircle fontSize={"18"} width='18' />}
 							</th>
 							<td className='px-6 py-4'>
-								{problem.id ? (
+								{(
 									<Link
-										href={problem.id}
 										className='hover:text-blue-600 cursor-pointer'
-										target='_blank'
+										href={`/problems/${problem.id.toString()}`}
 									>
 										{problem.title}
 									</Link>
-								) : (
-									<Link
-										className='hover:text-blue-600 cursor-pointer'
-										href={`/problems/${problem.id}`}
-									>
-										{problem.title}
-									</Link>
-								)}
-							</td>
-							<td className={`px-6 py-4 ${difficulyColor}`}>{problem.id}</td>
-							<td className={"px-6 py-4"}>{problem.id}</td>
-							<td className={"px-6 py-4"}>
-								{problem.id ? (
-									<AiFillYoutube
-										fontSize={"28"}
-										className='cursor-pointer hover:text-red-600'
-										onClick={() =>
-											setYoutubePlayer({ isOpen: true, videoId: problem.id as string })
-										}
-									/>
-								) : (
-									<p className='text-gray-400'>Coming soon</p>
 								)}
 							</td>
 						</tr>
 					);
 				})}
 			</tbody>
-			{youtubePlayer.isOpen && (
-				<tfoot className='fixed top-0 left-0 h-screen w-screen flex items-center justify-center'>
-					<div
-						className='bg-black z-10 opacity-70 top-0 left-0 w-screen h-screen absolute'
-						onClick={closeModal}
-					></div>
-					<div className='w-full z-50 h-full px-6 relative max-w-4xl'>
-						<div className='w-full h-full flex items-center justify-center relative'>
-							<div className='w-full relative'>
-								<IoClose
-									fontSize={"35"}
-									className='cursor-pointer absolute -top-16 right-0'
-									onClick={closeModal}
-								/>
-								<YouTube
-									videoId={youtubePlayer.videoId}
-									loading='lazy'
-									iframeClassName='w-full min-h-[500px]'
-								/>
-							</div>
-						</div>
-					</div>
-				</tfoot>
-			)}
 		</>
 	);
 };
@@ -130,7 +70,6 @@ function useGetProblems(setLoadingProblems: React.Dispatch<React.SetStateAction<
 			// fetching data logic
 			setLoadingProblems(true);
 			const problemList = await getProblemsList();
-			console.log('log', problemList);
 			setProblems(problemList);
 			setLoadingProblems(false);
 		};

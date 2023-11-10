@@ -1,12 +1,12 @@
 import Topbar from "@/components/Topbar/Topbar";
 import Workspace from "@/components/Workspace/Workspace";
 import useHasMounted from "@/hooks/useHasMounted";
-import { problems } from "@/utils/problems";
-import { Problem } from "@/utils/types/problem";
+import { problems } from "@/mockProblems/problems";
+import { DBProblem } from "@/utils/types/problem";
 import React from "react";
 
 type ProblemPageProps = {
-	problem: Problem;
+	problem: DBProblem;
 };
 
 const ProblemPage: React.FC<ProblemPageProps> = ({ problem }) => {
@@ -27,8 +27,9 @@ export default ProblemPage;
 //  SSG
 // getStaticPaths => it create the dynamic routes
 export async function getStaticPaths() {
-	const paths = Object.keys(problems).map((key) => ({
-		params: { pid: key },
+	const problemData = await problems;
+	const paths = problemData.map((problem) => ({
+		params: { pid: problem.id.toString() },
 	}));
 
 	return {
@@ -41,14 +42,15 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: { params: { pid: string } }) {
 	const { pid } = params;
-	const problem = problems[pid];
+	const problemsData = await problems;
+	const problem = problemsData.find((problem) => problem.id === parseInt(pid));
 
 	if (!problem) {
 		return {
 			notFound: true,
 		};
 	}
-	problem.handlerFunction = problem.handlerFunction.toString();
+	// problem.handlerFunction = problem.handlerFunction.toString();
 	return {
 		props: {
 			problem,

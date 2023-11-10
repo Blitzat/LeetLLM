@@ -4,13 +4,12 @@ import axios from 'axios';
 export async function getProblemsList(): Promise<DBProblem[]> {
 	try {
 		const response = await axios.get('http://api.leetllm.com/problems?language=en');
-		const problems: DBProblem[] = response.data.map((problem: any) => ({
+		const problems: DBProblem[] = response.data.map((problem: DBProblem) => ({
 			id: problem.id,
 			title: problem.title,
 			order: problem.order,
 			problemStatement: problem.problemStatement,
 		}));
-		console.log(problems);
 		return problems;
 	} catch (error) {
 		console.error(error);
@@ -20,17 +19,12 @@ export async function getProblemsList(): Promise<DBProblem[]> {
 
 export const problems: Promise<DBProblem[]> = getProblemsList();
 
-// export const problems: DBProblem[] = [
-// 	{
-// 		id: "two-sum",
-// 		title: "Two Sum",
-// 		order: 1,
-// 		problemStatement: "What is 1 + 1?",
-// 	},
-// 	{
-// 		id: "three-sum",
-// 		title: "Three Sum",
-// 		order: 2,
-// 		problemStatement: "What is 1 + 1 + 1?",
-// 	},
-// ];
+export async function solveProblem(solveRequest: { question_id: number; answer: string; language: string; }): Promise<any> {
+	try {
+		const response = await axios.post('https://api.leetllm.com/solve/', solveRequest);
+		console.log(response);
+		return response.data;
+	} catch (error) {
+		console.error(error);
+	}
+}

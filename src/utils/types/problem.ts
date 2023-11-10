@@ -7,7 +7,7 @@ export type Example = {
 };
 
 export type DBProblem = {
-	id: string;
+	id: number;
 	title: string;
 	problemStatement: string;
 	order: number;
