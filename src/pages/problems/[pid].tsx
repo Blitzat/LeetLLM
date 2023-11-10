@@ -43,7 +43,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: { params: { pid: string } }) {
 	const { pid } = params;
 	const problemsData = await problems;
-	const problem = problemsData.find((problem) => problem.id.toString() === pid);
+	const problem = problemsData.find((problem) => problem.id === parseInt(pid));
 
 	if (!problem) {
 		return {

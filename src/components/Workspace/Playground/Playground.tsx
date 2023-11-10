@@ -44,6 +44,8 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		query: { pid },
 	} = useRouter();
 
+	const [response, setResponse] = useState<{ answer: string; correct: boolean; explanation: string } | null>(null);
+
 	const handleSubmit = async () => {
 		// if (!user) {
 		// 	toast.error("Please login to submit your code", {
@@ -56,46 +58,33 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		const user = {
 			uid: 'mockUserId',
 		};
-		try {
-			userCode = userCode.slice(userCode.indexOf(""));
-			solveProblem({problem_id: Number(problem.id), answer: userCode, language: 'en'});
-			const success = true;
-			if (success) {
-				toast.success("Congrats! All tests passed!", {
-					position: "top-center",
-					autoClose: 3000,
-					theme: "dark",
-				});
-				setSuccess(true);
-				setTimeout(() => {
-					setSuccess(false);
-				}, 4000);
+		userCode = userCode.slice(userCode.indexOf(""));
+		const response = await solveProblem({ question_id: Number(problem.id), answer: userCode, language: 'en' });
+		setResponse(response);
+		if (response.correct) {
+			toast.success("Congrats! All tests passed!", {
+				position: "top-center",
+				autoClose: 3000,
+				theme: "dark",
+			});
+			setSuccess(true);
+			setTimeout(() => {
+				setSuccess(false);
+			}, 4000);
 
-				if (user.uid != 'mockUserId') {
-					const userRef = doc(firestore, "users", user.uid);
-					await updateDoc(userRef, {
-						solvedProblems: arrayUnion(pid),
-					});
-				}
-				setSolved(true);
-			}
-		} catch (error: any) {
-			console.log(error.message);
-			if (
-				error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")
-			) {
-				toast.error("Oops! test cases failed", {
-					position: "top-center",
-					autoClose: 3000,
-					theme: "dark",
-				});
-			} else {
-				toast.error(error.message, {
-					position: "top-center",
-					autoClose: 3000,
-					theme: "dark",
+			if (user.uid != 'mockUserId') {
+				const userRef = doc(firestore, "users", user.uid);
+				await updateDoc(userRef, {
+					solvedProblems: arrayUnion(pid),
 				});
 			}
+			setSolved(true);
+		} else {
+			toast.error("Oops! test cases failed", {
+				position: "top-center",
+				autoClose: 3000,
+				theme: "dark",
+			});
 		}
 	};
 
@@ -162,7 +151,11 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						</div> */}
 						<p className='text-sm font-medium mt-4 text-white'>Output:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
-							{/* {problem.examples[activeTestCaseId].outputText} */}
+							{response && response.answer}
+						</div>
+						<p className='text-sm font-medium mt-4 text-white'>explanation:</p>
+						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
+							{response && response.explanation}
 						</div>
 					</div>
 				</div>

@@ -23,7 +23,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 
 	const returnUserDataAndProblemData = async (transaction: any) => {
 		const userRef = doc(firestore, "users", user!.uid);
-		const problemRef = doc(firestore, "problems", problem.id);
+		const problemRef = doc(firestore, "problems", problem.id.toString());
 		const userDoc = await transaction.get(userRef);
 		const problemDoc = await transaction.get(problemRef);
 		return { userDoc, problemDoc, userRef, problemRef };
@@ -265,7 +265,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 };
 export default ProblemDescription;
 
-function useGetCurrentProblem(problemId: string) {
+function useGetCurrentProblem(problemId: number) {
 	const [currentProblem, setCurrentProblem] = useState<DBProblem | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [problemDifficultyClass, setProblemDifficultyClass] = useState<string>("");
@@ -296,7 +296,7 @@ function useGetCurrentProblem(problemId: string) {
 	return { currentProblem, loading, problemDifficultyClass, setCurrentProblem };
 }
 
-function useGetUsersDataOnProblem(problemId: string) {
+function useGetUsersDataOnProblem(problemId: number) {
 	const [data, setData] = useState({ liked: false, disliked: false, starred: false, solved: false });
 	const [user] = useAuthState(auth);
 
