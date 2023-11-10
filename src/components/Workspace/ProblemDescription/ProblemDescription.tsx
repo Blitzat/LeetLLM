@@ -274,20 +274,20 @@ function useGetCurrentProblem(problemId: string) {
 		// Get problem from DB
 		const getCurrentProblem = async () => {
 			setLoading(true);
-			const docRef = doc(firestore, "problems", problemId);
-			const docSnap = await getDoc(docRef);
-			if (docSnap.exists()) {
-				const problem = docSnap.data();
-				setCurrentProblem({ id: docSnap.id, ...problem } as DBProblem);
-				// easy, medium, hard
-				setProblemDifficultyClass(
-					problem.difficulty === "Easy"
-						? "bg-olive text-olive"
-						: problem.difficulty === "Medium"
-						? "bg-dark-yellow text-dark-yellow"
-						: " bg-dark-pink text-dark-pink"
-				);
-			}
+			// const docRef = doc(firestore, "problems", problemId);
+			// const docSnap = await getDoc(docRef);
+			// if (docSnap.exists()) {
+			// 	const problem = docSnap.data();
+			// 	setCurrentProblem({ id: docSnap.id, ...problem } as DBProblem);
+			// 	// easy, medium, hard
+			// 	setProblemDifficultyClass(
+			// 		problem.difficulty === "Easy"
+			// 			? "bg-olive text-olive"
+			// 			: problem.difficulty === "Medium"
+			// 			? "bg-dark-yellow text-dark-yellow"
+			// 			: " bg-dark-pink text-dark-pink"
+			// 	);
+			// }
 			setLoading(false);
 		};
 		getCurrentProblem();

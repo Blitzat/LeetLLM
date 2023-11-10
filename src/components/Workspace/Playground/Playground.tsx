@@ -13,6 +13,7 @@ import { problems } from "@/utils/problems";
 import { useRouter } from "next/router";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { solveProblem } from "@/mockProblems/problems";
 
 type PlaygroundProps = {
 	problem: DBProblem;
@@ -57,37 +58,33 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		};
 		try {
 			userCode = userCode.slice(userCode.indexOf(""));
-			const cb = new Function(`return ${userCode}`)();
-			const handler = problems[pid as string].handlerFunction;
+			solveProblem({problem_id: Number(problem.id), answer: userCode, language: 'en'});
+			const success = true;
+			if (success) {
+				toast.success("Congrats! All tests passed!", {
+					position: "top-center",
+					autoClose: 3000,
+					theme: "dark",
+				});
+				setSuccess(true);
+				setTimeout(() => {
+					setSuccess(false);
+				}, 4000);
 
-			if (typeof handler === "function") {
-				const success = handler(cb);
-				if (success) {
-					toast.success("Congrats! All tests passed!", {
-						position: "top-center",
-						autoClose: 3000,
-						theme: "dark",
+				if (user.uid != 'mockUserId') {
+					const userRef = doc(firestore, "users", user.uid);
+					await updateDoc(userRef, {
+						solvedProblems: arrayUnion(pid),
 					});
-					setSuccess(true);
-					setTimeout(() => {
-						setSuccess(false);
-					}, 4000);
-
-					if (user.uid != 'mockUserId') {
-						const userRef = doc(firestore, "users", user.uid);
-						await updateDoc(userRef, {
-							solvedProblems: arrayUnion(pid),
-						});
-					}
-					setSolved(true);
 				}
+				setSolved(true);
 			}
 		} catch (error: any) {
 			console.log(error.message);
 			if (
 				error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")
 			) {
-				toast.error("Oops! One or more test cases failed", {
+				toast.error("Oops! test cases failed", {
 					position: "top-center",
 					autoClose: 3000,
 					theme: "dark",
@@ -105,9 +102,9 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 	useEffect(() => {
 		const code = localStorage.getItem(`code-${pid}`);
 		if (user) {
-			setUserCode(code ? JSON.parse(code) : "problem.starterCode");
+			setUserCode(code ? JSON.parse(code) : "");
 		} else {
-			setUserCode("problem.starterCode");
+			setUserCode("");
 		}
 	}, [pid, user, "problem.starterCode"]);
 
@@ -126,7 +123,6 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						value={userCode}
 						theme={vscodeDark}
 						onChange={onChange}
-						extensions={[javascript()]}
 						style={{ fontSize: settings.fontSize }}
 					/>
 				</div>
@@ -134,7 +130,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 					{/* testcase heading */}
 					<div className='flex h-10 items-center space-x-6'>
 						<div className='relative flex h-full flex-col justify-center cursor-pointer'>
-							<div className='text-sm font-medium leading-5 text-white'>Testcases</div>
+							<div className='text-sm font-medium leading-5 text-white'>Answer</div>
 							<hr className='absolute bottom-0 h-0.5 w-full rounded-full border-none bg-white' />
 						</div>
 					</div>
@@ -160,10 +156,10 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 					</div> */}
 
 					<div className='font-semibold my-4'>
-						<p className='text-sm font-medium mt-4 text-white'>Input:</p>
+						{/* <p className='text-sm font-medium mt-4 text-white'>Input:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
-							{/* {problem.examples[activeTestCaseId].inputText} */}
-						</div>
+							{problem.examples[activeTestCaseId].inputText}
+						</div> */}
 						<p className='text-sm font-medium mt-4 text-white'>Output:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
 							{/* {problem.examples[activeTestCaseId].outputText} */}

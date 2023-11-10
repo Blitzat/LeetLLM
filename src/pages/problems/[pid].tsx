@@ -29,7 +29,7 @@ export default ProblemPage;
 export async function getStaticPaths() {
 	const problemData = await problems;
 	const paths = problemData.map((problem) => ({
-		params: { pid: problem.id.toString()},
+		params: { pid: problem.id.toString() },
 	}));
 
 	return {

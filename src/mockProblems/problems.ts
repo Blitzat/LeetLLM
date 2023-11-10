@@ -19,17 +19,12 @@ export async function getProblemsList(): Promise<DBProblem[]> {
 
 export const problems: Promise<DBProblem[]> = getProblemsList();
 
-// export const problems: DBProblem[] = [
-// 	{
-// 		id: "two-sum",
-// 		title: "Two Sum",
-// 		order: 1,
-// 		problemStatement: "What is 1 + 1?",
-// 	},
-// 	{
-// 		id: "three-sum",
-// 		title: "Three Sum",
-// 		order: 2,
-// 		problemStatement: "What is 1 + 1 + 1?",
-// 	},
-// ];
+export async function solveProblem(solveRequest: { problem_id: number; answer: string; language: string; }) {
+    try {
+        const response = await axios.post('http://api.leetllm.com/solve', solveRequest);
+		console.log(response);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
