@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Split from "react-split";
 import ProblemDescription from "./ProblemDescription/ProblemDescription";
 import Playground from "./Playground/Playground";
 import { DBProblem } from "@/utils/types/problem";
 import Confetti from "react-confetti";
 import useWindowSize from "@/hooks/useWindowSize";
+import React from "react";
 
 type WorkspaceProps = {
 	problem: DBProblem;
@@ -15,8 +16,17 @@ const Workspace: React.FC<WorkspaceProps> = ({ problem }) => {
 	const [success, setSuccess] = useState(false);
 	const [solved, setSolved] = useState(false);
 
+	useEffect(() => {
+		document.body.style.overflow = 'hidden';
+
+		// Clean up function
+		return () => {
+			document.body.style.overflow = 'auto';
+		};
+	}, []);
+
 	return (
-		<Split className='split' minSize={0}>
+		<Split className='split' direction='horizontal' sizes={[30, 70]} minSize={240}>
 			<ProblemDescription problem={problem} _solved={solved} />
 			<div className='bg-dark-fill-2'>
 				<Playground problem={problem} setSuccess={setSuccess} setSolved={setSolved} />

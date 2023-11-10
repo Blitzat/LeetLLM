@@ -61,7 +61,8 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		userCode = userCode.slice(userCode.indexOf(""));
 		const response = await solveProblem({ question_id: Number(problem.id), answer: userCode, language: 'en' });
 		setResponse(response);
-		if (response.correct) {
+		console.log(response);
+		if (response && response.correct) {
 			toast.success("Congrats! All tests passed!", {
 				position: "top-center",
 				autoClose: 3000,
@@ -106,7 +107,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		<div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
 			<PreferenceNav settings={settings} setSettings={setSettings} />
 
-			<Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={60}>
+			<Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={120}>
 				<div className='w-full overflow-auto'>
 					<CodeMirror
 						value={userCode}
@@ -115,7 +116,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						style={{ fontSize: settings.fontSize }}
 					/>
 				</div>
-				<div className='w-full px-5 overflow-auto'>
+				<div className='w-full h-full px-5 overflow-auto'>
 					{/* testcase heading */}
 					<div className='flex h-10 items-center space-x-6'>
 						<div className='relative flex h-full flex-col justify-center cursor-pointer'>
