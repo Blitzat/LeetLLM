@@ -9,7 +9,6 @@ import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/firebase";
 import { toast } from "react-toastify";
-import { problems } from "@/utils/problems";
 import { useRouter } from "next/router";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import useLocalStorage from "@/hooks/useLocalStorage";
