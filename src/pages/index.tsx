@@ -1,15 +1,31 @@
 import ProblemsTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
 import useHasMounted from "@/hooks/useHasMounted";
+import { getProblemsList } from "@/mockProblems/problems";
+import { useRouter } from "next/router";
 import Script from 'next/script'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ProblemPage from "./problems/[pid]";
+import { DBProblem } from "@/utils/types/problem";
 
 export default function Home() {
 	const [loadingProblems, setLoadingProblems] = useState(true);
 	const hasMounted = useHasMounted();
+	const [problem, setProblem] = useState<null | DBProblem>(null);
 
-	if (!hasMounted) return null;
+	useEffect(() => {
+        const fetchProblems = async () => {
+            const problems = await getProblemsList();
+            setProblem(problems[0]);
+        };
+
+        if (hasMounted) {
+            fetchProblems();
+        }
+    }, [hasMounted]);
+
+    if (!hasMounted || !problem) return null;
 
 	return (
 		<>
@@ -23,13 +39,14 @@ export default function Home() {
 				gtag('config', 'G-D16GBFPS1X');
 				`}
 			</Script>
-			<main className='bg-dark-layer-2 min-h-screen'>
+			<ProblemPage problem={problem} />
+			{/* <main className='bg-dark-layer-2 min-h-screen'>
 				<Topbar />
 				<h1
 					className='text-2xl text-center text-gray-700 dark:text-gray-400 font-medium
 					uppercase mt-10 mb-5'
 				>
-					&ldquo; QUALITY OVER QUANTITY &rdquo; 👇
+					LeetLLM
 				</h1>
 				<div className='relative overflow-x-auto mx-auto px-6 pb-10'>
 					{loadingProblems && (
@@ -55,7 +72,7 @@ export default function Home() {
 						<ProblemsTable setLoadingProblems={setLoadingProblems} />
 					</table>
 				</div>
-			</main>
+			</main> */}
 		</>
 	);
 }

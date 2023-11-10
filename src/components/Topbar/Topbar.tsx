@@ -11,7 +11,6 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { BsList } from "react-icons/bs";
 import Timer from "../Timer/Timer";
 import { useRouter } from "next/router";
-import { IconButton } from "@mui/material";
 
 type TopbarProps = {
 	problemPage?: boolean;
