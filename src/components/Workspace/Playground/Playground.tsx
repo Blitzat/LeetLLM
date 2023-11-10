@@ -5,7 +5,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
 import EditorFooter from "./EditorFooter";
-import { Problem } from "@/utils/types/problem";
+import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/firebase";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 type PlaygroundProps = {
-	problem: Problem;
+	problem: DBProblem;
 	setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 	setSolved: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -28,7 +28,7 @@ export interface ISettings {
 
 const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }) => {
 	const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
-	let [userCode, setUserCode] = useState<string>(problem.starterCode);
+	let [userCode, setUserCode] = useState<string>("");
 
 	const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
 
@@ -56,7 +56,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 			uid: 'mockUserId',
 		};
 		try {
-			userCode = userCode.slice(userCode.indexOf(problem.starterFunctionName));
+			userCode = userCode.slice(userCode.indexOf(""));
 			const cb = new Function(`return ${userCode}`)();
 			const handler = problems[pid as string].handlerFunction;
 
@@ -105,11 +105,11 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 	useEffect(() => {
 		const code = localStorage.getItem(`code-${pid}`);
 		if (user) {
-			setUserCode(code ? JSON.parse(code) : problem.starterCode);
+			setUserCode(code ? JSON.parse(code) : "problem.starterCode");
 		} else {
-			setUserCode(problem.starterCode);
+			setUserCode("problem.starterCode");
 		}
-	}, [pid, user, problem.starterCode]);
+	}, [pid, user, "problem.starterCode"]);
 
 	const onChange = (value: string) => {
 		setUserCode(value);
@@ -139,7 +139,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						</div>
 					</div>
 
-					<div className='flex'>
+					{/* <div className='flex'>
 						{problem.examples.map((example, index) => (
 							<div
 								className='mr-2 items-start mt-2 '
@@ -157,16 +157,16 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 								</div>
 							</div>
 						))}
-					</div>
+					</div> */}
 
 					<div className='font-semibold my-4'>
 						<p className='text-sm font-medium mt-4 text-white'>Input:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
-							{problem.examples[activeTestCaseId].inputText}
+							{/* {problem.examples[activeTestCaseId].inputText} */}
 						</div>
 						<p className='text-sm font-medium mt-4 text-white'>Output:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
-							{problem.examples[activeTestCaseId].outputText}
+							{/* {problem.examples[activeTestCaseId].outputText} */}
 						</div>
 					</div>
 				</div>

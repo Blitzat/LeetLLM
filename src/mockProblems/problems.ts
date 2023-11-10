@@ -10,7 +10,6 @@ export async function getProblemsList(): Promise<DBProblem[]> {
 			order: problem.order,
 			problemStatement: problem.problemStatement,
 		}));
-		console.log(problems);
 		return problems;
 	} catch (error) {
 		console.error(error);
