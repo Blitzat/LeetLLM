@@ -58,7 +58,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
 					</div>
 				)}
 
-				<div className='flex items-center space-x-4 flex-1 justify-end'>
+				{/* <div className='flex items-center space-x-4 flex-1 justify-end'>
 					{!user && (
 						<Link
 							href='/auth'
@@ -81,7 +81,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
 						</div>
 					)}
 					{user && <Logout />}
-				</div>
+				</div> */}
 			</div>
 		</nav>
 	);

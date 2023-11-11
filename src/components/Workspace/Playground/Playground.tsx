@@ -4,7 +4,6 @@ import Split from "react-split";
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
-import EditorFooter from "./EditorFooter";
 import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/firebase";
@@ -83,12 +82,6 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 				});
 			}
 			setSolved(true);
-		} else {
-			toast.error("Oops! test cases failed", {
-				position: "top-center",
-				autoClose: 3000,
-				theme: "dark",
-			});
 		}
 	};
 
@@ -116,15 +109,24 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						value={userCode}
 						theme={vscodeDark}
 						onChange={onChange}
+
 						style={{ fontSize: settings.fontSize }}
 					/>
 				</div>
 				<div className='w-full h-full px-5 overflow-auto'>
 					{/* testcase heading */}
-					<div className='flex h-10 items-center space-x-6'>
+					<div className='flex h-10 items-center space-x-6 justify-between'>
 						<div className='relative flex h-full flex-col justify-center cursor-pointer'>
 							<div className='text-sm font-medium leading-5 text-white'>Answer</div>
 							<hr className='absolute bottom-0 h-0.5 w-full rounded-full border-none bg-white' />
+						</div>
+						<div className='ml-auto flex items-center space-x-4'>
+							<button
+								className='mt-3 px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-green-s hover:bg-green-3 rounded-lg'
+								onClick={handleSubmit}
+							>
+								Submit
+							</button>
 						</div>
 					</div>
 
@@ -153,6 +155,9 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
 							{problem.examples[activeTestCaseId].inputText}
 						</div> */}
+						<h1 className={`text-2xl ${response ? (response.correct ? 'text-green-500' : 'text-red-500') : ''}`}>
+							{response ? (response.correct ? 'Correct' : 'Incorrect') : ''}
+						</h1>
 						<p className='text-sm font-medium mt-4 text-white'>Output:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
 							{response && response.answer}
@@ -164,7 +169,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 					</div>
 				</div>
 			</Split>
-			<EditorFooter handleSubmit={handleSubmit} />
+			{/* <EditorFooter handleSubmit={handleSubmit} /> */}
 		</div>
 	);
 };

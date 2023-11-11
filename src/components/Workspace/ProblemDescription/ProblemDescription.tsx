@@ -165,7 +165,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 				{/* TAB */}
 				<div className='flex h-11 w-full items-center pt-2 bg-dark-layer-2 text-white overflow-x-hidden'>
 					<div className={"bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer"}>
-						Description
+						Challenge
 					</div>
 				</div>
 
@@ -178,7 +178,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 							{/* Problem heading */}
 							<div className='w-full'>
 								<div className='flex space-x-4'>
-									<div className='flex-1 mr-2 text-lg text-white font-medium'>{problem?.title}</div>
+									<div className='flex-1 mr-2 mb-2 text-lg text-white font-medium'>{problem?.title}</div>
 								</div>
 								{!loading && currentProblem && (
 									<div className='flex items-center mt-3'>
@@ -250,7 +250,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 			{/* TAB */}
 			<div className='flex h-11 w-full items-center pt-2 bg-dark-layer-2 text-white overflow-x-hidden'>
 				<div className={"bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer"}>
-					Description
+					Challenge
 				</div>
 			</div>
 

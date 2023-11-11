@@ -36,6 +36,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 
 	return (
 		<>
+			<div className='text-white text-xl font-bold ml-10 mt-5 tracking-wider'>Select level</div>
 			<tbody className='text-white'>
 				{problems.map((problem, idx) => {
 					return (
@@ -43,7 +44,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 							<th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
 								{solvedProblems.includes(problem.id.toString()) && <BsCheckCircle fontSize={"18"} width='18' />}
 							</th>
-							<td className='px-6 py-4'>
+							<td className='px-6 py-3'>
 								{(
 									<Link
 										className='hover:text-blue-600 cursor-pointer'
