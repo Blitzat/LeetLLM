@@ -116,15 +116,24 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						value={userCode}
 						theme={vscodeDark}
 						onChange={onChange}
+						
 						style={{ fontSize: settings.fontSize }}
 					/>
 				</div>
 				<div className='w-full h-full px-5 overflow-auto'>
 					{/* testcase heading */}
-					<div className='flex h-10 items-center space-x-6'>
+					<div className='flex h-10 items-center space-x-6 justify-between'>
 						<div className='relative flex h-full flex-col justify-center cursor-pointer'>
 							<div className='text-sm font-medium leading-5 text-white'>Answer</div>
 							<hr className='absolute bottom-0 h-0.5 w-full rounded-full border-none bg-white' />
+						</div>
+						<div className='ml-auto flex items-center space-x-4'>
+							<button
+								className='mt-3 px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-green-s hover:bg-green-3 rounded-lg'
+								onClick={handleSubmit}
+							>
+								Submit
+							</button>
 						</div>
 					</div>
 
@@ -164,7 +173,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 					</div>
 				</div>
 			</Split>
-			<EditorFooter handleSubmit={handleSubmit} />
+			{/* <EditorFooter handleSubmit={handleSubmit} /> */}
 		</div>
 	);
 };
