@@ -4,7 +4,6 @@ import Split from "react-split";
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
-import EditorFooter from "./EditorFooter";
 import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/firebase";
@@ -83,12 +82,6 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 				});
 			}
 			setSolved(true);
-		} else {
-			toast.error("Oops! test cases failed", {
-				position: "top-center",
-				autoClose: 3000,
-				theme: "dark",
-			});
 		}
 	};
 
@@ -116,7 +109,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						value={userCode}
 						theme={vscodeDark}
 						onChange={onChange}
-						
+
 						style={{ fontSize: settings.fontSize }}
 					/>
 				</div>
@@ -162,6 +155,9 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
 							{problem.examples[activeTestCaseId].inputText}
 						</div> */}
+						<h1 className={`text-2xl ${response ? (response.correct ? 'text-green-500' : 'text-red-500') : ''}`}>
+							{response ? (response.correct ? 'Correct' : 'Incorrect') : ''}
+						</h1>
 						<p className='text-sm font-medium mt-4 text-white'>Output:</p>
 						<div className='w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2'>
 							{response && response.answer}
