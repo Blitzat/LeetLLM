@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export async function getProblemsList(): Promise<DBProblem[]> {
 	try {
-		const response = await axios.get('http://api.leetllm.com/problems?language=en');
+		const response = await axios.get('https://api.leetllm.com/problems?language=en');
 		const problems: DBProblem[] = response.data.map((problem: DBProblem) => ({
 			id: problem.id,
 			title: problem.title,
