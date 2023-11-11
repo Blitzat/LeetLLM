@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				<link rel='icon' href='/favicon.png' />
 				<meta
 					name='description'
-					content='Web application that contains leetcode problems and video solutions'
+					content='LeetLLM - Explore LLM-based Q&A challenges platform'
 				/>
 			</Head>
 			<ToastContainer />
