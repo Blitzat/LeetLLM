@@ -23,6 +23,7 @@ const Workspace: React.FC<WorkspaceProps> = ({ problem }) => {
 		// Clean up function
 		return () => {
 			document.body.style.overflow = 'auto';
+			document.body.style.backgroundColor = '#282828';
 		};
 	}, []);
 
