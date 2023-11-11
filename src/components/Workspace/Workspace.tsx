@@ -15,15 +15,26 @@ const Workspace: React.FC<WorkspaceProps> = ({ problem }) => {
 	const { width, height } = useWindowSize();
 	const [success, setSuccess] = useState(false);
 	const [solved, setSolved] = useState(false);
+	const isMobile = width <= 768;
 
 	useEffect(() => {
-		document.body.style.overflow = 'hidden';
+		if (!isMobile) document.body.style.overflow = 'hidden';
 
 		// Clean up function
 		return () => {
 			document.body.style.overflow = 'auto';
+			document.body.style.backgroundColor = '#282828';
 		};
 	}, []);
+
+	if (isMobile) {
+		return (
+			<div className='bg-dark-fill-2'>
+				<ProblemDescription problem={problem} _solved={solved} />
+				<Playground problem={problem} setSuccess={setSuccess} setSolved={setSolved} />
+			</div>
+		);
+	}
 
 	return (
 		<Split className='split' direction='horizontal' sizes={[30, 70]} minSize={240}>

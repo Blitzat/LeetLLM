@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { solveProblem } from "@/mockProblems/problems";
+import useWindowSize from "@/hooks/useWindowSize";
 
 type PlaygroundProps = {
 	problem: DBProblem;
@@ -44,6 +45,9 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 	} = useRouter();
 
 	const [response, setResponse] = useState<{ answer: string; correct: boolean; explanation: string } | null>(null);
+
+	const { width, height } = useWindowSize();
+	const isMobile = width <= 768;
 
 	const handleSubmit = async () => {
 		// if (!user) {
@@ -106,7 +110,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		<div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
 			<PreferenceNav settings={settings} setSettings={setSettings} />
 
-			<Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={120}>
+			<Split className={isMobile ? 'h-[calc(75vh-94px)]' : 'h-[calc(100vh-94px)]'} direction='vertical' sizes={isMobile ? [40, 60] : [60, 40]} minSize={120}>
 				<div className='w-full overflow-auto'>
 					<CodeMirror
 						value={userCode}
