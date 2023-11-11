@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PreferenceNav from "./PreferenceNav/PreferenceNav";
 import Split from "react-split";
 import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from '@codemirror/view';
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
 import { DBProblem } from "@/utils/types/problem";
@@ -109,7 +110,7 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 						value={userCode}
 						theme={vscodeDark}
 						onChange={onChange}
-
+						extensions={[EditorView.lineWrapping]}
 						style={{ fontSize: settings.fontSize }}
 					/>
 				</div>

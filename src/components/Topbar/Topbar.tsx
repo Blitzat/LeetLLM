@@ -56,7 +56,27 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
 							<FaChevronRight />
 						</div> */}
 					</div>
+
 				)}
+
+				<div className='flex items-center space-x-4 flex-1 justify-end'>
+					<Link href='https://discord.gg/nD6rxwky'>
+						<button
+							style={{
+								backgroundColor: '#5865F2', // Discord's brand color
+								color: 'white', // White text for contrast
+								padding: '4px 8px', // Reduced padding for a smaller button
+								borderRadius: '4px', // Rounded corners
+								cursor: 'pointer', // Cursor indicates a link
+								border: 'none', // No border
+								fontSize: '0.875rem', // Smaller font size
+								fontWeight: '500', // Medium font weight
+							}} className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>
+							Join Discord
+						</button>
+
+					</Link>
+				</div>
 
 				{/* <div className='flex items-center space-x-4 flex-1 justify-end'>
 					{!user && (
