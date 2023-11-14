@@ -7,7 +7,7 @@ import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/fires
 import { auth, firestore } from "@/firebase/firebase";
 import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { problems as plist, getProblemsList } from "@/mockProblems/problems";
+import { getProblemsList } from "@/mockProblems/problems";
 
 type ProblemsTableProps = {
 	setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
