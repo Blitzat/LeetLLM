@@ -17,8 +17,6 @@ export async function getProblemsList(): Promise<DBProblem[]> {
 	}
 }
 
-export const problems: Promise<DBProblem[]> = getProblemsList();
-
 export async function solveProblem(solveRequest: { question_id: number; answer: string; language: string; }): Promise<any> {
 	try {
 		const response = await axios.post('https://api.leetllm.com/solve/', solveRequest);

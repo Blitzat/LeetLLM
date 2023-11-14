@@ -1,7 +1,7 @@
 import Topbar from "@/components/Topbar/Topbar";
 import Workspace from "@/components/Workspace/Workspace";
 import useHasMounted from "@/hooks/useHasMounted";
-import { problems } from "@/mockProblems/problems";
+import { getProblemsList } from "@/mockProblems/problems";
 import { DBProblem } from "@/utils/types/problem";
 import React from "react";
 
@@ -27,14 +27,14 @@ export default ProblemPage;
 //  SSG
 // getStaticPaths => it create the dynamic routes
 export async function getStaticPaths() {
-	const problemData = await problems;
-	const paths = problemData.map((problem) => ({
+	const problemData = await getProblemsList();
+	const paths = problemData.slice(0, 100).map((problem) => ({
 		params: { pid: problem.id.toString() },
 	}));
 
 	return {
 		paths,
-		fallback: false,
+		fallback: 'blocking',
 	};
 }
 
@@ -42,7 +42,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: { params: { pid: string } }) {
 	const { pid } = params;
-	const problemsData = await problems;
+	const problemsData = await getProblemsList();
 	const problem = problemsData.find((problem) => problem.id === parseInt(pid));
 
 	if (!problem) {
@@ -55,5 +55,6 @@ export async function getStaticProps({ params }: { params: { pid: string } }) {
 		props: {
 			problem,
 		},
+		revalidate: 60 * 60 * 24,
 	};
 }
