@@ -171,7 +171,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 
 				<Split className='h-[calc(60vh-94px)]' direction='vertical' sizes={[50, 50]} minSize={100}>
 					<div className='overflow-y-auto'>
-						<ProblemsTable setLoadingProblems={setLoadingProblems} currentProblemId={problem.id}/>
+						<ProblemsTable setLoadingProblems={setLoadingProblems} currentProblemId={problem.order}/>
 					</div>
 					<div className='flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto'>
 						<div className='px-5'>
@@ -354,7 +354,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
 					</div>
 				</div>
 				<div className='overflow-y-auto'>
-					<ProblemsTable setLoadingProblems={setLoadingProblems} currentProblemId={problem.id} />
+					<ProblemsTable setLoadingProblems={setLoadingProblems} currentProblemId={problem.order} />
 				</div>
 			</Split>
 		</div>
