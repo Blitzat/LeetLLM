@@ -11,9 +11,10 @@ import { getProblemsList } from "@/mockProblems/problems";
 
 type ProblemsTableProps = {
 	setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
+	currentProblemId: number,
 };
 
-const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems, currentProblemId }) => {
 	const [youtubePlayer, setYoutubePlayer] = useState({
 		isOpen: false,
 		videoId: "",
@@ -36,22 +37,24 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems }) => 
 
 	return (
 		<>
-			<div className='text-white text-xl font-bold ml-10 mt-5 tracking-wider'>Select level</div>
+			<div className='text-white text-xl font-bold ml-10 mt-5 tracking-wider'>Levels</div>
 			<tbody className='text-white'>
 				{problems.map((problem, idx) => {
 					return (
-						<tr className={`${idx % 2 == 1 ? "bg-dark-layer-1" : ""}`} key={problem.id}>
+						<tr className={`problem-row ${problem.id < currentProblemId ? 'text-gray-500' : ''}`} key={problem.id}>
 							<th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
 								{solvedProblems.includes(problem.id.toString()) && <BsCheckCircle fontSize={"18"} width='18' />}
 							</th>
 							<td className='px-6 py-3'>
-								{(
+								{problem.id <= currentProblemId ? (
 									<Link
 										className='hover:text-blue-600 cursor-pointer'
 										href={`/problems/${problem.id.toString()}`}
 									>
 										{problem.title}
 									</Link>
+								) : (
+									<>{problem.title}</>
 								)}
 							</td>
 						</tr>

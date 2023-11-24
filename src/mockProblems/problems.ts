@@ -9,7 +9,7 @@ export async function getProblemsList(): Promise<DBProblem[]> {
 			title: problem.title,
 			order: problem.order,
 			problemStatement: problem.problemStatement,
-		}));
+		})).sort((a: { id: number; }, b: { id: number; }) => a.id - b.id);
 		return problems;
 	} catch (error) {
 		console.error(error);

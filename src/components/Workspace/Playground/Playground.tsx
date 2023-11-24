@@ -49,6 +49,12 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 	const { width, height } = useWindowSize();
 	const isMobile = width <= 768;
 
+	const router = useRouter();
+	const handleNext = async () => {
+		router.push(`/problems/${problem.id + 1}`);
+		router.reload();
+	}
+
 	const handleSubmit = async () => {
 		// if (!user) {
 		// 	toast.error("Please login to submit your code", {
@@ -64,7 +70,6 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		userCode = userCode.slice(userCode.indexOf(""));
 		const response = await solveProblem({ question_id: Number(problem.id), answer: userCode, language: 'en' });
 		setResponse(response);
-		console.log(response);
 		if (response && response.correct) {
 			toast.success("Congrats! All tests passed!", {
 				position: "top-center",
@@ -128,6 +133,14 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 							>
 								Submit
 							</button>
+							{response && response.correct && (
+								<button
+									className='mt-3 px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-blue-s hover:bg-green-3 rounded-lg'
+									onClick={handleNext}
+								>
+									Next
+								</button>
+							)}
 						</div>
 					</div>
 
