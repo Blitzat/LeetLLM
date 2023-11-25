@@ -68,8 +68,8 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 			53: "L A",
 			52: "N B",
 			51: "L T R",
-			36: "The first letter of the second module in How LLM Works (I)",
-			37: "The last letter of the first module in How LLM Works (I)",
+			36: "The first letter of the second module in How LLMs Work, and the last letter of the first module in How LLMs Work",
+			37: "A nine character word starts with B and ends with T",
 		};
 		const user = {
 			uid: 'mockUserId',
