@@ -60,7 +60,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
 				)}
 
 				<div className='flex items-center space-x-4 flex-1 mr-4 justify-end'>
-					<Link href='https://discord.gg/nD6rxwky'>
+					<Link href='https://discord.gg/YyRWZdQFsq'>
 						<button
 							style={{
 								backgroundColor: '#5865F2', // Discord's brand color
