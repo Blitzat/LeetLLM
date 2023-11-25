@@ -8,6 +8,8 @@ import { auth, firestore } from "@/firebase/firebase";
 import { DBProblem } from "@/utils/types/problem";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getProblemsList } from "@/mockProblems/problems";
+import { get } from "http";
+import next from "next";
 
 type ProblemsTableProps = {
 	setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,6 +27,9 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems, curre
 	const closeModal = () => {
 		setYoutubePlayer({ isOpen: false, videoId: "" });
 	};
+	const currentProblem = problems.find((problem) => problem.order === currentProblemId) || problems[0];
+	const nextProblemInOrder = problems.find((problem) => problem.order > currentProblemId) ||  problems[0];
+	console.log("nextProblemInOrder", nextProblemInOrder);
 
 	useEffect(() => {
 		const handleEsc = (e: KeyboardEvent) => {
@@ -41,12 +46,12 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems, curre
 			<tbody className='text-white'>
 				{problems.map((problem, idx) => {
 					return (
-						<tr className={`problem-row ${problem.id < currentProblemId ? 'text-gray-500' : ''}`} key={problem.id}>
+						<tr className={`problem-row ${problem.order < currentProblemId ? 'text-gray-500' : ''}`} key={problem.id}>
 							<th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
-								{solvedProblems.includes(problem.id.toString()) && <BsCheckCircle fontSize={"18"} width='18' />}
+								{solvedProblems.includes(problem.id.toString())}
 							</th>
 							<td className='px-6 py-3'>
-								{problem.id <= currentProblemId ? (
+								{problem.order <= currentProblemId ? (
 									<Link
 										className='hover:text-blue-600 cursor-pointer'
 										href={`/problems/${problem.id.toString()}`}
@@ -54,7 +59,18 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoadingProblems, curre
 										{problem.title}
 									</Link>
 								) : (
-									<>{problem.title}</>
+									(problem.id === nextProblemInOrder?.id && solvedProblems.includes(
+										currentProblem.id.toString()
+									) ) ? (
+										<Link
+											className='hover:text-blue-600 cursor-pointer'
+											href={`/problems/${problem.id.toString()}`}
+										>
+											{problem.title}
+										</Link>
+									
+									) :
+									<>🔒 {problem.title}</>
 								)}
 							</td>
 						</tr>
@@ -89,16 +105,20 @@ function useGetSolvedProblems() {
 
 	useEffect(() => {
 		const getSolvedProblems = async () => {
-			const userRef = doc(firestore, "users", user!.uid);
-			const userDoc = await getDoc(userRef);
+			// Retrieve solved problems from localStorage
+			const solvedProblemsString = localStorage.getItem(`solvedProblems`);
 
-			if (userDoc.exists()) {
-				setSolvedProblems(userDoc.data().solvedProblems);
+			if (solvedProblemsString) {
+				const solvedProblemsArray = JSON.parse(solvedProblemsString);
+				setSolvedProblems(solvedProblemsArray);
+			} else {
+				setSolvedProblems([]);
 			}
 		};
 
-		if (user) getSolvedProblems();
-		if (!user) setSolvedProblems([]);
+		// if (user) getSolvedProblems();
+		// if (!user) setSolvedProblems([]);
+		getSolvedProblems();
 	}, [user]);
 
 	return solvedProblems;
