@@ -49,6 +49,12 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 	const { width, height } = useWindowSize();
 	const isMobile = width <= 768;
 
+	const router = useRouter();
+	const handleNext = async () => {
+		router.push(`/problems/${problem.id + 1}`);
+		router.reload();
+	}
+
 	const handleSubmit = async () => {
 		// if (!user) {
 		// 	toast.error("Please login to submit your code", {
@@ -58,15 +64,28 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 		// 	});
 		// 	return;
 		// }
+		const wordHuntHintWordmap = {
+			53: "L A",
+			52: "N B",
+			51: "L T R",
+			36: "The first letter of the second module in How LLMs Work, and the last letter of the first module in How LLMs Work",
+			37: "A nine character word starts with B and ends with T",
+		};
 		const user = {
 			uid: 'mockUserId',
 		};
 		userCode = userCode.slice(userCode.indexOf(""));
 		const response = await solveProblem({ question_id: Number(problem.id), answer: userCode, language: 'en' });
 		setResponse(response);
-		console.log(response);
 		if (response && response.correct) {
-			toast.success("Congrats! All tests passed!", {
+			// try to get the hint word
+			const hintWord = wordHuntHintWordmap[problem.id as keyof typeof wordHuntHintWordmap];
+			var successMsg = "Congrats! All tests passed!";
+			if (hintWord) {
+				successMsg = `You have unlocked the clue: ${hintWord}`;
+			}
+
+			toast.success(successMsg, {
 				position: "top-center",
 				autoClose: 3000,
 				theme: "dark",
@@ -76,12 +95,24 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 				setSuccess(false);
 			}, 4000);
 
-			if (user.uid != 'mockUserId') {
-				const userRef = doc(firestore, "users", user.uid);
-				await updateDoc(userRef, {
-					solvedProblems: arrayUnion(pid),
-				});
+			// if (user.uid != 'mockUserId') {
+			// 	const userRef = doc(firestore, "users", user.uid);
+			// 	await updateDoc(userRef, {
+			// 		solvedProblems: arrayUnion(pid),
+			// 	});
+			// }
+
+			const solvedProblemsString = localStorage.getItem(`solvedProblems`);
+			if (solvedProblemsString) {
+				const solvedProblemsArray = JSON.parse(solvedProblemsString);
+				if (!solvedProblemsArray.includes(pid)) {
+					solvedProblemsArray.push(pid);
+					localStorage.setItem(`solvedProblems`, JSON.stringify(solvedProblemsArray));
+				}
+			} else {
+				localStorage.setItem(`solvedProblems`, JSON.stringify([pid]));
 			}
+			
 			setSolved(true);
 		}
 	};
@@ -128,6 +159,14 @@ const Playground: React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved 
 							>
 								Submit
 							</button>
+							{response && response.correct && (
+								<button
+									className='mt-3 px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-blue-s hover:bg-green-3 rounded-lg'
+									onClick={handleNext}
+								>
+									Next
+								</button>
+							)}
 						</div>
 					</div>
 
